@@ -31,12 +31,19 @@ export default function Home({
       {showShopPopup && <ShopPopup onClose={() => setShowShopPopup(false)} />}
       {showPriceTable && <PriceTablePopup onClose={() => setShowPriceTable(false)} />}
       {/* Hero banner */}
-      <div className="relative hero-brush">
+      <div
+        className="relative hero-brush overflow-hidden"
+        style={{
+          backgroundImage: `url('https://img.magnific.com/premium-vector/set-handdrawn-coffee-designs-drinks-snacks-coffee-accessories-vector-outline-coffee-pastries-cafe-menus_647193-7999.jpg?semt=ais_hybrid&w=740&q=80')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
         {/* top bar: logo left, socials right */}
         <div className="flex items-center gap-2 px-4 pt-4 pb-2">
           {/* Brand logo — top left (opens shop info & distance popup) */}
           <button onClick={() => setShowShopPopup(true)} className="flex-shrink-0">
-            <BrandLogo size={70} />
+            <BrandLogo size={100} />
           </button>
           <div className="flex-1" />
           {/* Facebook Link */}
@@ -112,12 +119,20 @@ export default function Home({
             </svg>
           </div>
           {/* khmer text */}
-          <div className="absolute right-8 top-8 opacity-80 pointer-events-none">
-            <div className="text-white text-5xl font-bold leading-none" style={{ fontFamily: "Kantumruy Pro" }}>
-              នុធំ26
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="flex flex-col items-center text-center">
+            <div
+              className="text-[#3D2314] text-5xl font-black leading-none tracking-wide"
+              style={{ fontFamily: "Kantumruy Pro", textShadow: "0 2px 8px rgba(0,0,0,0.65)" }}
+            >
+              នុធំ26កាហ្វេ
             </div>
-            <div className="text-white text-3xl mt-1" style={{ fontFamily: "Kantumruy Pro" }}>
-              កាហ្វេ
+            <div
+              className="text-[#3D2314] text-3xl mt-1 font-semibold"
+              style={{ fontFamily: "Kantumruy Pro", textShadow: "0 2px 8px rgba(0,0,0,0.65)" }}
+            >
+              
+            </div>
             </div>
           </div>
           {/* faded coffee cup icon */}
@@ -142,7 +157,7 @@ export default function Home({
                 <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18.717-.961 4.292-1.356 5.99-.168.719-.434.96-.69.983-.556.052-1.026-.264-1.564-.616-.843-.551-1.319-.894-2.138-1.433-.946-.623-.332-.965.206-1.524.141-.146 2.585-2.371 2.635-2.583.006-.027.012-.128-.048-.181-.06-.054-.148-.035-.212-.021-.091.02-1.536.974-4.335 2.86-.41.281-.782.419-1.114.412-.366-.008-1.071-.207-1.595-.377-.643-.21-1.155-.32-1.11-.676.024-.185.277-.375.76-.57 2.969-1.292 4.948-2.144 5.938-2.557 2.827-1.179 3.414-1.384 3.798-1.391.084-.002.273.019.394.118.102.083.13.194.141.272.011.08.025.263.013.416z"/>
               </svg>
             </div>
-            <span>+855 93 342 226</span>
+            <span className="font-black text-black">+855 93 342 226</span>
           </div>
           {/* NT26 price table button */}
           <button
@@ -211,7 +226,7 @@ export default function Home({
                 ៛ {(0).toLocaleString()}
               </div>
               <div className="absolute inset-0 flex items-center justify-start pl-3 text-xs text-gray-600 font-medium">
-                 
+                ​
               </div>
             </div>
           </div>

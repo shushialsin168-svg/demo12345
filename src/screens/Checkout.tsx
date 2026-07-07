@@ -211,7 +211,7 @@ export default function Checkout({
                 </div>
                 <div className="mt-2 inline-flex items-center gap-1 bg-green-50 text-green-700 text-[11px] px-2 py-1 rounded-full">
                   <IconCheck className="w-3 h-3" />
-                  ទីតាំងនេះនឹងត្រូវផ្ញើទៅ Telegram ស្វ័យប្រវត្តិ
+                  ទីតាំងនេះនឹងត្រូវផ្ញើទៅ ហាង ស្វ័យប្រវត្តិ
                 </div>
               </>
             )}
