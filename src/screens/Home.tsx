@@ -119,19 +119,19 @@ export default function Home({
             </svg>
           </div>
           {/* khmer text */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="absolute inset-0 flex items-start justify-center pt-8 pointer-events-none">
             <div className="flex flex-col items-center text-center">
             <div
               className="text-[#3D2314] text-5xl font-black leading-none tracking-wide"
               style={{ fontFamily: "Kantumruy Pro", textShadow: "0 2px 8px rgba(0,0,0,0.65)" }}
             >
-              នុធំ26កាហ្វេ
+              នុធំ26
             </div>
             <div
               className="text-[#3D2314] text-3xl mt-1 font-semibold"
               style={{ fontFamily: "Kantumruy Pro", textShadow: "0 2px 8px rgba(0,0,0,0.65)" }}
             >
-              
+              កាហ្វេ
             </div>
             </div>
           </div>
@@ -162,7 +162,7 @@ export default function Home({
           {/* NT26 price table button */}
           <button
             onClick={() => setShowPriceTable(true)}
-            className="bg-white rounded-full pl-1 pr-2 py-1 flex items-center gap-1.5 text-sm font-medium text-gray-700 shadow"
+            className="bg-white rounded-full pl-1 pr-2 py-1 flex items-center gap-1.5 text-sm font-semibold text-gray-800 shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-gray-200 transform active:translate-y-1 active:shadow-[0_2px_6px_rgba(0,0,0,0.18),0_4px_12px_rgba(0,0,0,0.12)]"
           >
             <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
               <img src={brandImage} alt="Brand" className="w-full h-full object-cover" />
