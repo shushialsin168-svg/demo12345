@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  --teal: #148c78;
+  --teal-dark: #0f6f61;
+  --teal-light: #d9f1ea;
+  --mint: #e6f4ef;
+  --cream: #f6f9f7;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  font-family: "Kantumruy Pro", "Inter", system-ui, sans-serif;
+  background: #eef2f1;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+
+/* Custom scrollbar for the mobile frame */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Hero background — kitchenware pattern image with soft tint overlay */
+.hero-brush {
+  background-image:
+    linear-gradient(160deg, rgba(143, 151, 143, 0.55) 0%, rgba(184, 191, 184, 0.45) 100%),
+    url("https://thumbs.dreamstime.com/b/seamless-pattern-kitchenware-utensils-cutlery-teapot-cups-food-drinks-roll-vase-plants-seamless-pattern-238411023.jpg");
+  background-size: auto, cover;
+  background-position: center, center;
+  background-repeat: no-repeat;
+}
+
+.dashed-line {
+  background-image: linear-gradient(to right, #cbd5d1 50%, transparent 50%);
+  background-size: 10px 2px;
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+/* subtle card shadow */
+.card-shadow { box-shadow: 0 8px 24px rgba(20, 140, 120, 0.08), 0 2px 4px rgba(0,0,0,0.04); }
+
+button { cursor: pointer; }
