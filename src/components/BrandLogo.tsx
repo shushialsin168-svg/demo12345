@@ -1,13 +1,24 @@
 import { useState } from "react";
+// Static import to ensure the asset is included by the bundler at dev-time.
+import preferredLogoStatic from "../assets/IMG_7403.PNG";
 
 /**
  * Brand logo resolution order:
- *  1. Local file at src/assets/logo.{png,jpg,jpeg,webp} (if you add one)
- *  2. The NT26 emblem from the Telegram channel photo (CDN URL)
- *  3. SVG fallback badge drawn in the same style
+ * 1. Local file at src/assets/IMG_7403.PNG (Preferred)
+ * 2. Local fallback at src/assets/logo.{png,jpg,jpeg,webp}
+ * 3. The NT26 emblem from the Telegram channel photo (CDN URL)
+ * 4. SVG fallback badge drawn in the same style
  */
 
-// Vite glob: resolves to {} if no file exists — build never breaks.
+// Dynamic Vite glob targeting your exact image name
+// Prefer a static import first (robust during development), then fallback to
+// the glob lookup in case the static import isn't desired in some environments.
+const preferredLogoUrl = (preferredLogoStatic as string) ||
+  (Object.values(import.meta.glob("../assets/IMG_7403.PNG", { eager: true, import: "default" }))[0] as
+    | string
+    | undefined);
+
+// Vite glob fallback for generic logo names
 const logoModules = import.meta.glob("../assets/logo.{png,jpg,jpeg,webp}", {
   eager: true,
   import: "default",
@@ -18,12 +29,68 @@ const localLogoUrl = Object.values(logoModules)[0] as string | undefined;
 const TELEGRAM_LOGO_URL =
   "https://cdn5.telesco.pe/file/NaYNpfyeY1z4oO7T6sA7ICDak3O0P3UJx4kf4saiIXEBZDdBtHldqmlk-DHBZcSMXVOwodqb5hZL3xsdB17VHWwQkvL-CegPAgszTe59O3f8NikIJMsgpWDt_nHNvYxOm0oqDvPI-7Vzdu9tk8cLPRvnfaL_1eHLSSHDNcmdDguqq_NzxkRLvoy3lzDmLqYAcCNIjROMWDIetWp5_2akVnNXmI2C1mtewQVYVp-_nOtakDrDxBVk_63iap7FzgfWRg27l2ZX5aqWzVhRTUexe7PCrAIg78pdNvdN9e-sIzMjv66kYk7LGtJtHMYpUoV-vfM_AmAqDMqnakCJ_EW4yA.jpg";
 
-const logoUrl = localLogoUrl ?? TELEGRAM_LOGO_URL;
+const logoUrl = preferredLogoUrl ?? localLogoUrl ?? TELEGRAM_LOGO_URL;
 
 export const hasBrandLogo = true;
 
 export default function BrandLogo({ size = 160 }: { size?: number }) {
   const [imgFailed, setImgFailed] = useState(false);
+
+  // If we specifically have the preferred image, render it inside the SVG
+  // badge so the look matches the designed emblem. If that image fails to
+  // load, fall back to the generic `logoUrl` or the SVG badge.
+  if (preferredLogoUrl && !imgFailed) {
+    const clipId = `brand-clip-${size}`;
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 200 200"
+        role="img"
+        aria-label="NT26 Coffee"
+        style={{ filter: "drop-shadow(0 8px 24px rgba(0,0,0,.35))" }}
+      >
+        <defs>
+          <clipPath id={clipId}>
+            <circle cx="100" cy="80" r="60" />
+          </clipPath>
+        </defs>
+
+        {/* image in center, clipped to a round shape */}
+        <image
+          href={preferredLogoUrl}
+          x="40"
+          y="20"
+          width="120"
+          height="120"
+          preserveAspectRatio="xMidYMid slice"
+          clipPath={`url(#${clipId})`}
+          onError={() => setImgFailed(true)}
+        />
+
+        {/* outer ring */}
+        <circle cx="100" cy="100" r="98" fill="#5a2317" />
+        <circle cx="100" cy="100" r="92" fill="#6f2f1f" />
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#f6ede2" strokeWidth="1.5" opacity=".55" />
+
+        {/* ornamental flame swirls (simplified) */}
+        <g stroke="#f6ede2" strokeWidth="1.4" fill="none" opacity=".5">
+          <path d="M30 130 C20 100 30 70 55 52 C45 75 48 95 60 110 C48 118 38 124 30 130Z" />
+          <path d="M170 130 C180 100 170 70 145 52 C155 75 152 95 140 110 C152 118 162 124 170 130Z" />
+          <path d="M45 155 C60 165 80 168 100 165 C80 175 58 170 45 155Z" />
+          <path d="M155 155 C140 165 120 168 100 165 C120 175 142 170 155 155Z" />
+        </g>
+
+        {/* decorative frame around the image */}
+        <circle cx="100" cy="80" r="64" fill="none" stroke="#f6ede2" strokeWidth="2" opacity=".85" />
+
+        {/* Khmer brand text */}
+        <text x="100" y="170" textAnchor="middle" fill="#ffffff" fontFamily="'Kantumruy Pro', sans-serif" fontWeight="700" fontSize="20">
+          នុធំ26
+        </text>
+      </svg>
+    );
+  }
 
   if (logoUrl && !imgFailed) {
     return (

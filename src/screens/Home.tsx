@@ -12,7 +12,8 @@ import {
 import ShopPopup from "../components/ShopPopup";
 import PriceTablePopup from "../components/PriceTablePopup";
 import BrandLogo from "../components/BrandLogo";
-import brandImage from "../assets/IMG_7401.PNG";
+import brandImage from "../assets/IMG_7403.PNG";
+import brandImage1 from "../assets/IMG_7401.PNG";
 
 export default function Home({
   onNavigate,
@@ -42,13 +43,13 @@ export default function Home({
         {/* top bar: logo left, socials right */}
         <div className="flex items-center gap-2 px-4 pt-4 pb-2">
           {/* Brand logo — top left (opens shop info & distance popup) */}
-          <button onClick={() => setShowShopPopup(true)} className="flex-shrink-0">
+          {/* <button onClick={() => setShowShopPopup(true)} className="flex-shrink-0">
             <BrandLogo size={100} />
-          </button>
+          </button> */}
           <div className="flex-1" />
           {/* Facebook Link */}
             <a 
-              href="https://facebook.com/yourprofile" 
+              href="https://www.facebook.com/NoukThom26CoffeenDrinks" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity"
@@ -62,7 +63,7 @@ export default function Home({
 
             {/* TikTok Link */}
             <a 
-              href="https://tiktok.com/@yourprofile" 
+              href="https://www.tiktok.com/@nt26genzcoffe?is_from_webapp=1&sender_device=pc" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity"
@@ -76,7 +77,7 @@ export default function Home({
 
             {/* Telegram Link */}
             <a 
-              href="https://t.me/@NT26_Cafe" 
+              href="https://t.me/NT26_Cafe" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity"
@@ -101,7 +102,13 @@ export default function Home({
               />
           </button>
         </div>
-
+        <div className="absolute left-4 top-4 z-30">
+          <img
+            src={brandImage}
+            alt="Brand"
+            className="w-25 h-25 rounded-full object-cover shadow-2xl"
+          />
+        </div>
         {/* Hero area: faded cup illustrations + big brand title */}
         <div className="relative h-56 flex items-center justify-center">
           {/* faded cup illustration */}
@@ -147,28 +154,24 @@ export default function Home({
 
         {/* bottom contact bar */}
         <div className="absolute bottom-0 left-0 right-0 flex justify-around items-center pb-3 text-white text-xs">
-          <div className="flex items-center gap-1 opacity-90">
-            <div className="w-6 h-6 rounded-full bg-[#26A5E4] flex items-center justify-center">
-              <svg 
-                viewBox="0 0 24 24" 
-                fill="currentColor" 
-                className="w-5 h-5 text-white"
-              >
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18.717-.961 4.292-1.356 5.99-.168.719-.434.96-.69.983-.556.052-1.026-.264-1.564-.616-.843-.551-1.319-.894-2.138-1.433-.946-.623-.332-.965.206-1.524.141-.146 2.585-2.371 2.635-2.583.006-.027.012-.128-.048-.181-.06-.054-.148-.035-.212-.021-.091.02-1.536.974-4.335 2.86-.41.281-.782.419-1.114.412-.366-.008-1.071-.207-1.595-.377-.643-.21-1.155-.32-1.11-.676.024-.185.277-.375.76-.57 2.969-1.292 4.948-2.144 5.938-2.557 2.827-1.179 3.414-1.384 3.798-1.391.084-.002.273.019.394.118.102.083.13.194.141.272.011.08.025.263.013.416z"/>
-              </svg>
-            </div>
+          <div className="flex items-center gap-1 opacity-90 contact-float">
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB6INYnvxmk0WWLLzUhvu2pRekYTLq2gjBIDAoJsqlhFOa8GeIetYJKno&s=10"
+              alt="Telegram Contact"
+              className="w-8 h-8 rounded-full object-cover contact-pulse"
+            />
             <span className="font-black text-black">+855 93 342 226</span>
           </div>
           {/* NT26 price table button */}
           <button
             onClick={() => setShowPriceTable(true)}
-            className="bg-white rounded-full pl-1 pr-2 py-1 flex items-center gap-1.5 text-sm font-semibold text-gray-800 shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-gray-200 transform active:translate-y-1 active:shadow-[0_2px_6px_rgba(0,0,0,0.18),0_4px_12px_rgba(0,0,0,0.12)]"
+            className="price-btn float-anim bg-white rounded-full pl-1 pr-2 py-1 flex items-center gap-1.5 text-sm font-semibold text-gray-800 shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-gray-200 transform active:translate-y-1 active:shadow-[0_2px_6px_rgba(0,0,0,0.18),0_4px_12px_rgba(0,0,0,0.12)]"
           >
             <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-              <img src={brandImage} alt="Brand" className="w-full h-full object-cover" />
+              <img src={brandImage1} alt="Brand" className="w-full h-full object-cover" />
             </div>
            នុធំ26 បោកគក់_សម្ងួតរហ័ស 
-            <IconChevronDown className="w-4 h-4" />
+            <IconChevronDown className="w-4 h-4 chev-rotate" />
           </button>
         </div>
       </div>

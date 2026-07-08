@@ -43,3 +43,54 @@ html, body, #root {
 .card-shadow { box-shadow: 0 8px 24px rgba(20, 140, 120, 0.08), 0 2px 4px rgba(0,0,0,0.04); }
 
 button { cursor: pointer; }
+
+/* Contact animations */
+@keyframes floatY {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  70% { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.contact-float { animation: floatY 3s ease-in-out infinite; }
+.contact-pulse { position: relative; }
+.contact-pulse::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  background: rgba(38,165,228,0.14);
+  animation: pulseRing 2s infinite;
+  pointer-events: none;
+}
+
+/* Price table button animations */
+.price-btn {
+  transition: transform .18s ease, box-shadow .18s ease;
+  will-change: transform;
+}
+.price-btn:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+}
+.price-btn:active {
+  transform: translateY(-2px) scale(0.99);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+.chev-rotate { transition: transform .22s ease; display: inline-block; }
+.price-btn:hover .chev-rotate { transform: rotate(180deg); }
+
+/* Continuous float for CTA buttons */
+.float-anim {
+  animation: floatY 4s ease-in-out infinite;
+  will-change: transform;
+}
