@@ -191,7 +191,7 @@ export default function Home({
                   referrerPolicy="no-referrer"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-300 to-orange-400 flex items-center justify-center text-2xl border-2 border-yellow-400">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-300 via-yellow-300 to-yellow-500 flex items-center justify-center text-2xl border-2 border-amber-500 text-yellow-950 shadow-[0_10px_30px_rgba(255,200,0,0.25)]">
                   👩
                 </div>
               )}

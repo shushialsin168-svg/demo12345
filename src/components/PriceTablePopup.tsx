@@ -219,7 +219,7 @@ export default function PriceTablePopup({ onClose }: { onClose: () => void }) {
             <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
               📍
             </span>
-            <span style={{ fontFamily: "Kantumruy Pro" }}>ស្កេនសម្រាប់ទីតាំង</span>
+            <span style={{ fontFamily: "Kantumruy Pro" }}>មានសេវ៉ាដឹក</span>
           </div>
         </div>
       </div>
