@@ -14,6 +14,7 @@ import PriceTablePopup from "../components/PriceTablePopup";
 import BrandLogo from "../components/BrandLogo";
 import brandImage from "../assets/IMG_7403.PNG";
 import brandImage1 from "../assets/IMG_7401.PNG";
+import heroImage from "../assets/coffee-mocha.jpg";
 
 export default function Home({
   onNavigate,
@@ -35,7 +36,7 @@ export default function Home({
       <div
         className="relative hero-brush overflow-hidden"
         style={{
-          backgroundImage: `url('https://img.magnific.com/premium-vector/set-handdrawn-coffee-designs-drinks-snacks-coffee-accessories-vector-outline-coffee-pastries-cafe-menus_647193-7999.jpg?semt=ais_hybrid&w=740&q=80')`,
+          backgroundImage: `url(${heroImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -112,23 +113,23 @@ export default function Home({
         {/* Hero area: faded cup illustrations + big brand title */}
         <div className="relative h-56 flex items-center justify-center">
           {/* faded cup illustration */}
-          <div className="absolute left-6 top-6 opacity-40">
+          {/* <div className="absolute left-6 top-6 opacity-40">
             <svg width="80" height="120" viewBox="0 0 80 120" fill="none" stroke="#fff8dc" strokeWidth="2">
               <path d="M15 30h50l-6 80H21z" />
               <path d="M20 40h40" />
             </svg>
-          </div>
+          </div> */}
           {/* faded coffee bag */}
-          <div className="absolute left-24 top-16 opacity-40">
+          {/* <div className="absolute left-24 top-16 opacity-40">
             <svg width="60" height="80" viewBox="0 0 60 80" fill="none" stroke="#fff8dc" strokeWidth="2">
               <rect x="10" y="10" width="40" height="60" rx="2" />
               <text x="30" y="45" textAnchor="middle" fill="#fff8dc" fontSize="8">coffee</text>
             </svg>
-          </div>
+          </div> */}
           {/* khmer text */}
-          <div className="absolute inset-0 flex items-start justify-center pt-8 pointer-events-none">
+          <div className="absolute inset-0 flex items-start justify-end pt-8 pointer-events-none">
             <div className="flex flex-col items-center text-center">
-            <div
+            {/* <div
               className="text-[#3D2314] text-5xl font-black leading-none tracking-wide"
               style={{ fontFamily: "Kantumruy Pro", textShadow: "0 2px 8px rgba(0,0,0,0.65)" }}
             >
@@ -139,33 +140,33 @@ export default function Home({
               style={{ fontFamily: "Kantumruy Pro", textShadow: "0 2px 8px rgba(0,0,0,0.65)" }}
             >
               កាហ្វេ
-            </div>
+            </div> */}
             </div>
           </div>
           {/* faded coffee cup icon */}
-          <div className="absolute right-6 top-4 opacity-40">
+          {/* <div className="absolute right-6 top-4 opacity-40">
             <svg width="50" height="50" viewBox="0 0 50 50" fill="none" stroke="#fff8dc" strokeWidth="2">
               <path d="M10 25c0-8 6-15 15-15s15 7 15 15" />
               <path d="M8 30h34l-4 12H12z" />
               <path d="M42 32c4 0 5 6 0 6" />
             </svg>
-          </div>
+          </div> */}
         </div>
 
         {/* bottom contact bar */}
         <div className="absolute bottom-0 left-0 right-0 flex justify-around items-center pb-3 text-white text-xs">
-          <div className="flex items-center gap-1 opacity-90 contact-float">
+          <div className="flex items-center gap-2 opacity-90 contact-float shadow-[0_8px_24px_rgba(0,0,0,0.22)] rounded-full px-3 py-2 bg-black/20">
             <img
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB6INYnvxmk0WWLLzUhvu2pRekYTLq2gjBIDAoJsqlhFOa8GeIetYJKno&s=10"
               alt="Telegram Contact"
               className="w-8 h-8 rounded-full object-cover contact-pulse"
             />
-            <span className="font-black text-black">+855 93 342 226</span>
+            <span className="font-black text-white text-sm">+855 93 342 226</span>
           </div>
           {/* NT26 price table button */}
           <button
             onClick={() => setShowPriceTable(true)}
-            className="price-btn float-anim bg-white rounded-full pl-1 pr-2 py-1 flex items-center gap-1.5 text-sm font-semibold text-gray-800 shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border border-gray-200 transform active:translate-y-1 active:shadow-[0_2px_6px_rgba(0,0,0,0.18),0_4px_12px_rgba(0,0,0,0.12)]"
+            className="price-btn float-anim bg-white rounded-full pl-1 pr-2 py-1 flex items-center gap-1.5 text-sm font-semibold text-gray-800 shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border-2 border-[#148c78] transform active:translate-y-1 active:shadow-[0_2px_6px_rgba(0,0,0,0.18),0_4px_12px_rgba(0,0,0,0.12)]"
           >
             <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
               <img src={brandImage1} alt="Brand" className="w-full h-full object-cover" />
