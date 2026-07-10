@@ -206,7 +206,7 @@ export default function PriceTablePopup({ onClose }: { onClose: () => void }) {
 
             {/* Right Side Text (Only this floats) */}
             <span
-              className="absolute right-4 top-135 text-white font-bold text-base bg-red-600 px-2 py-0.5 rounded animate-[bounce_2s_infinite]"
+              className="absolute right-4 top-140 text-white font-bold text-base bg-red-600 px-2 py-0.5 rounded animate-[bounce_2s_infinite]"
               style={{ fontFamily: "Kantumruy Pro" }}
             >
               មានសេវ៉ាដឹក
