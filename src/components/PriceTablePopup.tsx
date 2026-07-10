@@ -193,7 +193,8 @@ export default function PriceTablePopup({ onClose }: { onClose: () => void }) {
 
         {/* ── FOOTER ── */}
         <div className="bg-[#0a5c8f] px-5 py-4">
-          <div className="text-center">
+          <div className="text-left flex items-center gap-3">
+            {/* Original Time Text */}
             <span
               className="text-white font-bold text-base"
               style={{ fontFamily: "Kantumruy Pro" }}
@@ -202,7 +203,16 @@ export default function PriceTablePopup({ onClose }: { onClose: () => void }) {
               <span className="text-[#f5d848] font-black text-lg">6AM</span> ដល់{" "}
               <span className="text-[#f5d848] font-black text-lg">12AM</span>
             </span>
+
+            {/* Right Side Text (Only this floats) */}
+            <span
+              className="absolute right-4 top-135 text-white font-bold text-base bg-red-600 px-2 py-0.5 rounded animate-[bounce_2s_infinite]"
+              style={{ fontFamily: "Kantumruy Pro" }}
+            >
+              មានសេវ៉ាដឹក
+            </span>
           </div>
+          
           <p
             className="mt-2 text-white/85 text-[11px] leading-relaxed text-center"
             style={{ fontFamily: "Kantumruy Pro" }}
@@ -210,17 +220,34 @@ export default function PriceTablePopup({ onClose }: { onClose: () => void }) {
             ផ្លូវបេតុងថ្មី(ព្រែកបារាំង) ចម្ងាយ 300ម៉ែត្រពីកាវ៉ាស់សាំង Total និរោធ
             ឆ្ពោះទៅស្តុបផ្លូវព្រែកប្រា
           </p>
-          <div className="mt-3 flex items-center justify-center gap-2 text-white text-xs">
-            <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
-              📞
-            </span>
-            <span className="font-semibold">+855 93 342 226</span>
-            <span className="mx-1 opacity-40">|</span>
-            <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
-              📍
-            </span>
-            <span style={{ fontFamily: "Kantumruy Pro" }}>មានសេវ៉ាដឹក</span>
-          </div>
+          <div className="mt-3 flex items-center justify-center gap-5 text-white">
+  {/* Left Section: Image Phone Icon & Larger Number */}
+  <div className="flex items-center gap-3">
+    <img 
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB6INYnvxmk0WWLLzUhvu2pRekYTLq2gjBIDAoJsqlhFOa8GeIetYJKno&s=10"
+      alt="Phone icon"
+      className="w-7 h-7 object-contain rounded-full"
+    />
+    <span className="text-lg font-black tracking-wide whitespace-nowrap">
+      +855 93 342 226
+    </span>
+  </div>
+
+  {/* Separator Divider */}
+  <span className="text-xl opacity-30 mx-1">|</span>
+
+  {/* Right Section: QR Code Image & Label Stacked Vertically */}
+  <div className="flex flex-col items-center gap-1.5">
+    <img 
+      src="https://raw.githubusercontent.com/shushialsin168-svg/mcstore/main/photo_2026-07-10_15-41-31.jpg" 
+      alt="Facebook QR Code" 
+      className="w-[65px] h-[65px] object-contain bg-white p-1" 
+    />
+    <span className="font-black text-xs tracking-wide text-center">
+      FACEBOOK.PAGE
+    </span>
+  </div>
+</div>
         </div>
       </div>
 
