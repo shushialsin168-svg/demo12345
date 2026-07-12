@@ -154,27 +154,37 @@ export default function Home({
         </div>
 
         {/* bottom contact bar */}
-        <div className="absolute bottom-0 left-0 right-0 flex justify-around items-center pb-3 text-white text-xs">
-          <div className="flex items-center gap-2 opacity-90 contact-float shadow-[0_8px_24px_rgba(0,0,0,0.22)] rounded-full px-3 py-2 bg-black/20">
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB6INYnvxmk0WWLLzUhvu2pRekYTLq2gjBIDAoJsqlhFOa8GeIetYJKno&s=10"
-              alt="Telegram Contact"
-              className="w-8 h-8 rounded-full object-cover contact-pulse"
-            />
-            <span className="font-black text-white text-sm">+855 93 342 226</span>
-          </div>
-          {/* NT26 price table button */}
-          <button
-            onClick={() => setShowPriceTable(true)}
-            className="price-btn float-anim bg-white rounded-full pl-1 pr-2 py-1 flex items-center gap-1.5 text-sm font-semibold text-gray-800 shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border-2 border-[#148c78] transform active:translate-y-1 active:shadow-[0_2px_6px_rgba(0,0,0,0.18),0_4px_12px_rgba(0,0,0,0.12)]"
-          >
-            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-              <img src={brandImage1} alt="Brand" className="w-full h-full object-cover" />
-            </div>
-           នុធំ26 បោកគក់_សម្ងួតរហ័ស 
-            <IconChevronDown className="w-4 h-4 chev-rotate" />
-          </button>
-        </div>
+        <div className="absolute bottom-0 left-0 right-0 grid grid-cols-2 items-center pb-3 text-white text-xs w-full px-2">
+  {/* Left side: Phone number with solid background pill */}
+  <div className="flex justify-end pr-1.5 max-w-full">
+    <div className="flex items-center gap-1.5 sm:gap-2 opacity-95 contact-float shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] rounded-full pl-1 pr-3 py-1 bg-[#22c55e] border-2 border-white/80 min-w-0 max-w-full">
+      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white flex items-center justify-center overflow-hidden flex-shrink-0">
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB6INYnvxmk0WWLLzUhvu2pRekYTLq2gjBIDAoJsqlhFOa8GeIetYJKno&s=10"
+          alt="Telegram Contact"
+          className="w-6 h-6 object-cover contact-pulse"
+        />
+      </div>
+      <span className="font-black text-white text-[16px] sm:text-sm whitespace-nowrap">
+            +855 93 342 226    
+      </span>
+    </div>
+  </div>
+
+  {/* Right side: Brand button */}
+  <div className="flex justify-start pl-1.5 max-w-full">
+    <button
+      onClick={() => setShowPriceTable(true)}
+      className="price-btn float-anim bg-white rounded-full pl-1 pr-2 py-1 flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-sm font-semibold text-gray-800 shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border-2 border-[#148c78] transform active:translate-y-1 active:shadow-[0_2px_6px_rgba(0,0,0,0.18),0_4px_12px_rgba(0,0,0,0.12)] min-w-0 max-w-full"
+    >
+      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
+        <img src={brandImage1} alt="Brand" className="w-full h-full object-cover" />
+      </div>
+      <span className="truncate text-gray-800">នុធំ26 បោកគក់_សម្ងួតរហ័ស</span>
+      <IconChevronDown className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 chev-rotate" />
+    </button>
+  </div>
+</div>
       </div>
 
       {/* Scrollable content */}
