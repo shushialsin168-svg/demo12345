@@ -175,12 +175,20 @@ export default function LocationPicker({
         <button
           onClick={useMyLocation}
           disabled={locating}
-          className="absolute bottom-4 right-4 z-[500] bg-white shadow-lg rounded-full px-3 py-2.5 text-xs font-medium text-[#148c78] flex items-center gap-1 disabled:opacity-60"
+          className="absolute bottom-6 right-6 z-[500] bg-white rounded-full flex items-center gap-2 font-semibold text-[#148c78] disabled:opacity-60
+                    /* Bigger Sizing */
+                    px-5 py-3.5 text-sm md:text-base shadow-xl
+                    /* Matching Teal/Cyan Stroke (Ring) & Subtle Shadow Glow */
+                    ring-2 ring-[#148c78] shadow-[0_0_15px_rgba(20,140,120,0.2)]
+                    /* Continuous Looping & Interactive Pop Animations */
+                    transition-all duration-200 ease-out
+                    hover:scale-105 active:scale-95 active:animate-none
+                    animate-[bounce_2s_infinite_ease-in-out]"
         >
           {locating ? (
-            <span className="w-3 h-3 border-2 border-[#148c78]/40 border-t-[#148c78] rounded-full animate-spin" />
+            <span className="w-4 h-4 border-2 border-[#148c78]/40 border-t-[#148c78] rounded-full animate-spin" />
           ) : (
-            "🎯"
+            <span className="text-base md:text-lg">🎯</span>
           )}
           ទីតាំងខ្ញុំ
         </button>

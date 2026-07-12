@@ -241,7 +241,7 @@ export default function PriceTablePopup({ onClose }: { onClose: () => void }) {
     <img 
       src="https://raw.githubusercontent.com/shushialsin168-svg/mcstore/main/photo_2026-07-10_15-41-31.jpg" 
       alt="Facebook QR Code" 
-      className="w-[65px] h-[65px] object-contain bg-white p-1" 
+      className="w-[70px] h-[70px] object-contain bg-white p-1" 
     />
     <span className="font-black text-xs tracking-wide text-center">
       FACEBOOK.PAGE
