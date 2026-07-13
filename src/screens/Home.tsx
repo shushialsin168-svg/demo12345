@@ -308,7 +308,18 @@ export default function Home({
         )}
 
         {/* small padding */}
-        <div className="h-6" />
+        <div className="h-8" />
+
+        {/* ── PREMIUM CORE FOOTER COMPONENT ── */}
+        <footer className="px-4 pb-4 text-center">
+          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white border border-gray-200/60 rounded-full shadow-sm">
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Administrator</span>
+            <span className="text-[9px] text-gray-300">|</span>
+            <span className="text-[10px] font-medium text-gray-500">
+              Power by: <span className="font-extrabold text-[#148c78] tracking-wide">B4D DEV</span>
+            </span>
+          </div>
+        </footer>
       </div>
 
       {/* Bottom nav */}
