@@ -32,12 +32,17 @@ export default function Product({
     );
   }
 
+  // Check if this product is out of stock
+  const isOutOfStock = product.tag === "Out of Stock";
+
   const toggle = (groupIdx: number, id: string, multi: boolean) => {
+    if (isOutOfStock) return; // Prevent selection if out of stock
     setSelected((prev) => {
       const key = String(groupIdx);
       const cur = prev[key] ?? [];
       if (multi) {
         return {
+          ...prev,
           ...prev,
           [key]: cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id],
         };
@@ -54,6 +59,8 @@ export default function Product({
   const totalPrice = (product.price + optionsPrice) * qty;
 
   const handleAdd = () => {
+    if (isOutOfStock) return; // Protection fallback check
+
     const labels: string[] = [];
     Object.entries(selected).forEach(([k, ids]) => {
       const g = optionGroups[Number(k)];
@@ -84,6 +91,13 @@ export default function Product({
         >
           <IconArrowLeft className="w-5 h-5" />
         </button>
+        {isOutOfStock && (
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+            <span className="bg-red-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md">
+              អស់ស្តុក / Out of Stock
+            </span>
+          </div>
+        )}
         <div className="absolute left-4 bottom-4 flex flex-col gap-2 text-white/90">
           <div className="w-5 h-5 rounded-full bg-white/30 flex items-center justify-center text-xs">🔍</div>
           <div className="w-5 h-5 rounded-full bg-white/30 flex items-center justify-center text-xs">↻</div>
@@ -93,10 +107,18 @@ export default function Product({
       {/* Details */}
       <div className="flex-1 overflow-y-auto no-scrollbar px-5 pt-4 pb-28">
         <div className="flex items-center gap-3">
-          <h2 className="flex-1 text-lg font-bold text-gray-800">{product.nameKh}</h2>
-          <div className="flex items-center gap-2 border border-gray-200 rounded-full px-1 py-0.5">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-lg font-bold text-gray-800 truncate">{product.nameKh}</h2>
+            {isOutOfStock && (
+              <span className="inline-block mt-0.5 text-xs text-red-600 font-medium bg-red-50 px-2 py-0.5 rounded">
+                មិនអាចកុម្ម៉ង់បានទេ
+              </span>
+            )}
+          </div>
+          <div className={`flex items-center gap-2 border border-gray-200 rounded-full px-1 py-0.5 ${isOutOfStock ? "opacity-40 pointer-events-none" : ""}`}>
             <button
               onClick={() => setQty((q) => Math.max(1, q - 1))}
+              disabled={isOutOfStock}
               className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600"
             >
               −
@@ -104,6 +126,7 @@ export default function Product({
             <span className="w-6 text-center font-medium">{qty}</span>
             <button
               onClick={() => setQty((q) => q + 1)}
+              disabled={isOutOfStock}
               className="w-8 h-8 rounded-full border border-[#148c78] text-[#148c78] flex items-center justify-center"
             >
               +
@@ -113,7 +136,7 @@ export default function Product({
 
         {/* Option groups — 2-column grid */}
         {optionGroups.map((g, i) => (
-          <div key={i} className="mt-4">
+          <div key={i} className={`mt-4 ${isOutOfStock ? "opacity-50 pointer-events-none" : ""}`}>
             <div className="text-sm font-semibold text-gray-800">{g.title}</div>
             <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1">
               {g.options.map((o) => {
@@ -136,6 +159,7 @@ export default function Product({
                     </span>
                     <button
                       type="button"
+                      disabled={isOutOfStock}
                       onClick={() => toggle(i, o.id, g.multi)}
                       className="flex-1 min-w-0 flex items-center justify-between gap-1 text-[13px] text-gray-700"
                     >
@@ -155,7 +179,8 @@ export default function Product({
         <div className="mt-4">
           <input
             placeholder="ចំណាំ"
-            className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#148c78]"
+            disabled={isOutOfStock}
+            className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#148c78] disabled:bg-gray-50 disabled:text-gray-400"
           />
         </div>
       </div>
@@ -169,10 +194,15 @@ export default function Product({
           </div>
           <button
             onClick={handleAdd}
-            className="bg-[#148c78] text-white rounded-full px-5 py-2.5 text-sm font-medium flex items-center gap-2"
+            disabled={isOutOfStock}
+            className={`rounded-full px-5 py-2.5 text-sm font-medium flex items-center gap-2 text-white transition-all ${
+              isOutOfStock 
+                ? "bg-gray-600 cursor-not-allowed opacity-50" 
+                : "bg-[#148c78] active:opacity-90"
+            }`}
           >
             <IconCart className="w-4 h-4" />
-            បន្ថែមចូលកន្ត្រក
+            {isOutOfStock ? "ដាច់ស្តុក" : "បន្ថែមចូលកន្ត្រក"}
           </button>
         </div>
       </div>
