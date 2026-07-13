@@ -4,9 +4,11 @@ import { addProduct, deleteProduct, updateProduct } from "../db";
 import { useCart } from "../store";
 import { IconArrowLeft, IconCheck, IconEdit, IconTrash } from "../components/Icons";
 
+// ⚠️ WARNING: Anyone viewing the network/source tab can see this string. 
+// For real security, migrate this verification to a secure backend API.
 const ADMIN_PIN = "wGO9Cn]Z68#J";
 
-/** Compress an image file to a max-600px JPEG data URL. */
+/** Compress an image file to a max-480px JPEG data URL. */
 function fileToDataUrl(file: File, maxSize = 480, quality = 0.72): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -37,12 +39,13 @@ export default function Admin({ onBack }: { onBack: () => void }) {
   const [pin, setPin] = useState("");
   const [pinErr, setPinErr] = useState(false);
 
-  // form state
+  // Form states
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [categoryId, setCategoryId] = useState("tea");
   const [image, setImage] = useState<string | null>(null);
   const [multiToppings, setMultiToppings] = useState(false);
+  const [inStock, setInStock] = useState(true); // Manages available/unavailable inventory state
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -55,6 +58,7 @@ export default function Admin({ onBack }: { onBack: () => void }) {
     setCategoryId("tea");
     setImage(null);
     setMultiToppings(false);
+    setInStock(true);
     setEditingId(null);
     if (fileRef.current) fileRef.current.value = "";
   };
@@ -67,9 +71,11 @@ export default function Admin({ onBack }: { onBack: () => void }) {
     setPrice(String(p.price));
     setCategoryId(p.categoryId);
     setImage(p.image);
-    setMultiToppings(!!p.tag);
+    setMultiToppings(p.tag === "Multiple Toppings");
+    setInStock(p.tag !== "Out of Stock"); // If marked out of stock, uncheck stock toggle
     setMsg(null);
-    // scroll to the form
+    
+    // Smoothly scroll the container back up to view the editing panel
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -114,6 +120,15 @@ export default function Admin({ onBack }: { onBack: () => void }) {
       return;
     }
     setSaving(true);
+
+    // Compute database standard flags from local states
+    let computedTag: string | null = null;
+    if (!inStock) {
+      computedTag = "Out of Stock";
+    } else if (multiToppings) {
+      computedTag = "Multiple Toppings";
+    }
+
     try {
       if (editingId) {
         await updateProduct({
@@ -122,7 +137,7 @@ export default function Admin({ onBack }: { onBack: () => void }) {
           categoryId,
           price: priceNum,
           image,
-          tag: multiToppings ? "Multiple Toppings" : null,
+          tag: computedTag,
         });
       } else {
         await addProduct({
@@ -131,7 +146,7 @@ export default function Admin({ onBack }: { onBack: () => void }) {
           categoryId,
           price: priceNum,
           image,
-          tag: multiToppings ? "Multiple Toppings" : null,
+          tag: computedTag,
         });
       }
       await refreshProducts();
@@ -143,8 +158,7 @@ export default function Admin({ onBack }: { onBack: () => void }) {
       });
     } catch (err: unknown) {
       console.error(err);
-      const detail =
-        err instanceof Error ? err.message : String(err ?? "unknown error");
+      const detail = err instanceof Error ? err.message : String(err ?? "unknown error");
       setMsg({
         ok: false,
         text: `ការរក្សាទុកបរាជ័យ។ សូមព្យាយាមម្តងទៀត។ (${detail.slice(0, 160)})`,
@@ -166,7 +180,7 @@ export default function Admin({ onBack }: { onBack: () => void }) {
     }
   };
 
-  // ── PIN gate ──────────────────────────────────────────────────────────
+  // ── PIN gate screen ──────────────────────────────────────────────────────────
   if (!authed) {
     return (
       <div className="flex flex-col h-full bg-[#e6f4ef]">
@@ -208,7 +222,7 @@ export default function Admin({ onBack }: { onBack: () => void }) {
     );
   }
 
-  // ── Admin panel ───────────────────────────────────────────────────────
+  // ── Admin Panel view ───────────────────────────────────────────────────────
   return (
     <div className="flex flex-col h-full bg-[#f2f7f5]">
       <div className="flex items-center gap-3 px-4 pt-4 pb-2 bg-[#e6f4ef]">
@@ -222,7 +236,7 @@ export default function Admin({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="flex-1 overflow-y-auto no-scrollbar px-4 pt-3 pb-8">
-        {/* Add / edit product form */}
+        {/* Add / Edit Form panel */}
         <form ref={formRef} onSubmit={submit} className="bg-white rounded-2xl card-shadow p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="text-[#148c78] font-semibold text-sm">
@@ -287,10 +301,7 @@ export default function Admin({ onBack }: { onBack: () => void }) {
               className="hidden"
               id="admin-image-input"
             />
-            <label
-              htmlFor="admin-image-input"
-              className="block cursor-pointer"
-            >
+            <label htmlFor="admin-image-input" className="block cursor-pointer">
               {image ? (
                 <div className="relative rounded-xl overflow-hidden border-2 border-[#148c78]/40">
                   <img src={image} alt="preview" className="w-full h-40 object-cover" />
@@ -307,15 +318,31 @@ export default function Admin({ onBack }: { onBack: () => void }) {
             </label>
           </div>
 
-          <label className="flex items-center gap-2 mb-4 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={multiToppings}
-              onChange={(e) => setMultiToppings(e.target.checked)}
-              className="accent-[#148c78] w-4 h-4"
-            />
-            <span className="text-xs text-gray-600">Multiple Toppings</span>
-          </label>
+          <div className="flex flex-col gap-2 mb-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={multiToppings}
+                disabled={!inStock} 
+                onChange={(e) => setMultiToppings(e.target.checked)}
+                className="accent-[#148c78] w-4 h-4 disabled:opacity-50"
+              />
+              <span className={`text-xs text-gray-600 ${!inStock ? "opacity-50" : ""}`}>Multiple Toppings</span>
+            </label>
+
+            {/* Inventory Status Switcher */}
+            <label className="flex items-center gap-2 cursor-pointer border-t pt-2 mt-1">
+              <input
+                type="checkbox"
+                checked={inStock}
+                onChange={(e) => setInStock(e.target.checked)}
+                className="accent-[#148c78] w-4 h-4"
+              />
+              <span className="text-xs font-medium text-gray-700">
+                មានក្នុងស្តុក (In Stock)
+              </span>
+            </label>
+          </div>
 
           {msg && (
             <div
@@ -348,7 +375,7 @@ export default function Admin({ onBack }: { onBack: () => void }) {
           </button>
         </form>
 
-        {/* Uploaded products list */}
+        {/* Existing Products List Grid */}
         <div className="mt-5">
           <div className="text-[#148c78] font-semibold text-sm mb-2">
             📦 ទំនិញដែលបានបន្ថែម ({dbProducts.length})
@@ -361,18 +388,36 @@ export default function Admin({ onBack }: { onBack: () => void }) {
           <div className="space-y-2">
             {dbProducts.map((p) => {
               const cat = categories.find((c) => c.id === p.categoryId);
+              const isOut = p.tag === "Out of Stock";
+
               return (
                 <div
                   key={p.id}
-                  className="bg-white rounded-xl p-2.5 flex items-center gap-3 card-shadow"
+                  className={`bg-white rounded-xl p-2.5 flex items-center gap-3 card-shadow relative ${
+                    isOut ? "opacity-75 bg-gray-50/50" : ""
+                  }`}
                 >
-                  <img
-                    src={p.image}
-                    alt={p.nameKh}
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
+                  <div className="relative">
+                    <img
+                      src={p.image}
+                      alt={p.nameKh}
+                      className="w-12 h-12 rounded-lg object-cover"
+                    />
+                    {isOut && (
+                      <div className="absolute inset-0 bg-black/40 rounded-lg flex items-center justify-center text-[9px] text-white font-bold tracking-tight">
+                        ដាច់ស្តុក
+                      </div>
+                    )}
+                  </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-gray-800 truncate">{p.nameKh}</div>
+                    <div className="text-sm font-medium text-gray-800 truncate flex items-center gap-1.5">
+                      {p.nameKh}
+                      {isOut && (
+                        <span className="text-[10px] bg-red-100 text-red-700 px-1.5 py-0.5 rounded font-normal">
+                          អស់ស្តុក
+                        </span>
+                      )}
+                    </div>
                     <div className="text-[11px] text-gray-500">
                       {cat?.nameKh} · {formatPrice(p.price)}
                     </div>
@@ -380,14 +425,14 @@ export default function Admin({ onBack }: { onBack: () => void }) {
                   <button
                     onClick={() => startEdit(p.id)}
                     title="កែប្រែ"
-                    className="w-8 h-8 rounded-full bg-[#148c78]/10 text-[#148c78] flex items-center justify-center"
+                    className="w-8 h-8 rounded-full bg-[#148c78]/10 text-[#148c78] flex items-center justify-center z-10"
                   >
                     <IconEdit className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => remove(p.id)}
                     title="លុប"
-                    className="w-8 h-8 rounded-full bg-red-50 text-red-500 flex items-center justify-center"
+                    className="w-8 h-8 rounded-full bg-red-50 text-red-500 flex items-center justify-center z-10"
                   >
                     <IconTrash className="w-4 h-4" />
                   </button>
@@ -395,7 +440,6 @@ export default function Admin({ onBack }: { onBack: () => void }) {
               );
             })}
           </div>
-
         </div>
       </div>
     </div>
