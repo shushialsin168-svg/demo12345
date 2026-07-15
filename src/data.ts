@@ -1,3 +1,7 @@
+// ==========================================
+// 1. TypeScript Types
+// ==========================================
+
 export type Category = {
   id: string;
   nameKh: string;
@@ -12,6 +16,23 @@ export type Product = {
   tag?: string;
 };
 
+export type Option = { 
+  id: string; 
+  label: string; 
+  price: number; 
+};
+
+export type OptionGroup = {
+  title: string;
+  multi: boolean;
+  options: Option[];
+};
+
+
+// ==========================================
+// 2. Data Constants
+// ==========================================
+
 export const categories: Category[] = [
   { id: "all", nameKh: "ទាំងអស់" },
   { id: "tea", nameKh: "គេសជ្ជៈប្រភេទតែ" },
@@ -19,15 +40,14 @@ export const categories: Category[] = [
   { id: "ice", nameKh: "គេសជ្ជៈក្រឡុក" },
   { id: "juice", nameKh: "គេសជ្ជៈផ្លែឈើ" },
   { id: "snack", nameKh: "អាហារសម្រន់" },
+  { id: "other", nameKh: "ផ្សេងៗ" }, // Added "other" Category
 ];
 
 // Products are managed entirely from the Admin page (stored in the database).
 // This static list is intentionally empty.
 export const products: Product[] = [];
 
-export type Option = { id: string; label: string; price: number };
-
-export const optionGroups: { title: string; multi: boolean; options: Option[] }[] = [
+export const optionGroups: OptionGroup[] = [
   {
     title: "បន្ថែម",
     multi: true,
@@ -80,5 +100,31 @@ export const optionGroups: { title: string; multi: boolean; options: Option[] }[
   },
 ];
 
-export const formatPrice = (n: number) =>
+
+// ==========================================
+// 3. Helper Functions
+// ==========================================
+
+export const formatPrice = (n: number): string =>
   `៛ ${n.toLocaleString("en-US")}`;
+
+/**
+ * Returns available option groups for a given category.
+ * - Returns an empty array `[]` for "other" or "snack" categories to completely block and hide options.
+ * - Hides coffee-specific options ("សម្រាប់កាហ្វេ") for any category other than "coffee".
+ */
+export const getAvailableOptionGroups = (categoryId: string): OptionGroup[] => {
+  // Completely block all customization options for snacks and others
+  const blockedCategories = ["other", "snack"];
+  if (blockedCategories.includes(categoryId)) {
+    return [];
+  }
+
+  // Filter groups dynamically
+  return optionGroups.filter((group) => {
+    if (group.title === "សម្រាប់កាហ្វេ") {
+      return categoryId === "coffee";
+    }
+    return true;
+  });
+};
