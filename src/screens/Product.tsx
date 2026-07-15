@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { optionGroups, formatPrice } from "../data";
+import { optionGroups, formatPrice, getAvailableOptionGroups } from "../data";
 import { useCart } from "../store";
 import { IconArrowLeft, IconCart } from "../components/Icons";
 
@@ -35,24 +35,27 @@ export default function Product({
   // Check if this product is out of stock
   const isOutOfStock = product.tag === "Out of Stock";
 
-  const toggle = (groupIdx: number, id: string, multi: boolean) => {
+  // Get active option groups for this specific category
+  const activeOptionGroups = getAvailableOptionGroups(product.categoryId);
+
+  const toggle = (groupTitle: string, id: string, multi: boolean) => {
     if (isOutOfStock) return; // Prevent selection if out of stock
     setSelected((prev) => {
-      const key = String(groupIdx);
-      const cur = prev[key] ?? [];
+      const cur = prev[groupTitle] ?? [];
       if (multi) {
         return {
           ...prev,
-          ...prev,
-          [key]: cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id],
+          [groupTitle]: cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id],
         };
       }
-      return { ...prev, [key]: [id] };
+      return { ...prev, [groupTitle]: [id] };
     });
   };
 
-  const optionsPrice = Object.entries(selected).reduce((sum, [k, ids]) => {
-    const group = optionGroups[Number(k)];
+  // Calculate prices using the group's title key
+  const optionsPrice = Object.entries(selected).reduce((sum, [groupTitle, ids]) => {
+    const group = optionGroups.find((g) => g.title === groupTitle);
+    if (!group) return sum;
     return sum + ids.reduce((s, id) => s + (group.options.find((o) => o.id === id)?.price ?? 0), 0);
   }, 0);
 
@@ -62,12 +65,14 @@ export default function Product({
     if (isOutOfStock) return; // Protection fallback check
 
     const labels: string[] = [];
-    Object.entries(selected).forEach(([k, ids]) => {
-      const g = optionGroups[Number(k)];
-      ids.forEach((id) => {
-        const opt = g.options.find((o) => o.id === id);
-        if (opt) labels.push(opt.label);
-      });
+    Object.entries(selected).forEach(([groupTitle, ids]) => {
+      const g = optionGroups.find((group) => group.title === groupTitle);
+      if (g) {
+        ids.forEach((id) => {
+          const opt = g.options.find((o) => o.id === id);
+          if (opt) labels.push(opt.label);
+        });
+      }
     });
     const key = `${product.id}-${labels.join("|")}`;
     addToCart({
@@ -134,13 +139,13 @@ export default function Product({
           </div>
         </div>
 
-        {/* Option groups — 2-column grid */}
-        {optionGroups.map((g, i) => (
-          <div key={i} className={`mt-4 ${isOutOfStock ? "opacity-50 pointer-events-none" : ""}`}>
+        {/* Option groups — Displays only if allowed for this category */}
+        {activeOptionGroups.map((g) => (
+          <div key={g.title} className={`mt-4 ${isOutOfStock ? "opacity-50 pointer-events-none" : ""}`}>
             <div className="text-sm font-semibold text-gray-800">{g.title}</div>
             <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1">
               {g.options.map((o) => {
-                const checked = (selected[String(i)] ?? []).includes(o.id);
+                const checked = (selected[g.title] ?? []).includes(o.id);
                 return (
                   <label
                     key={o.id}
@@ -160,7 +165,7 @@ export default function Product({
                     <button
                       type="button"
                       disabled={isOutOfStock}
-                      onClick={() => toggle(i, o.id, g.multi)}
+                      onClick={() => toggle(g.title, o.id, g.multi)}
                       className="flex-1 min-w-0 flex items-center justify-between gap-1 text-[13px] text-gray-700"
                     >
                       <span className="truncate text-left">{o.label}</span>
@@ -175,7 +180,7 @@ export default function Product({
           </div>
         ))}
 
-        {/* note */}
+        {/* Note */}
         <div className="mt-4">
           <input
             placeholder="ចំណាំ"
@@ -205,6 +210,16 @@ export default function Product({
             {isOutOfStock ? "ដាច់ស្តុក" : "បន្ថែមចូលកន្ត្រក"}
           </button>
         </div>
+        
+        <footer className="px-4 pb-4 text-center">
+          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white border border-gray-200/60 rounded-full shadow-sm">
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Administrator</span>
+            <span className="text-[9px] text-gray-300">|</span>
+            <span className="text-[10px] font-medium text-gray-500">
+              Power by: <span className="font-extrabold text-[#148c78] tracking-wide">B4D DEV</span>
+            </span>
+          </div>
+        </footer>
       </div>
     </div>
   );
