@@ -27,13 +27,19 @@ export default function Home({
   const [showShopPopup, setShowShopPopup] = useState(false);
   const [showPriceTable, setShowPriceTable] = useState(false);
 
-  // ── FILTER: Show only 1 item per category type ──
+  // ── FILTER: Show 1 item per category, but HIDE the "other" category completely ──
   const seenCategoryIds = new Set<string>();
   const featuredProducts = products
     .filter((p) => {
-      if (!p.categoryId || seenCategoryIds.has(p.categoryId)) {
-        return false; // Skip if this category was already collected
+      // 1. Skip if the product belongs to the "other" category or has no category
+      if (!p.categoryId || p.categoryId === "other") {
+        return false;
       }
+      // 2. Skip if we already picked an item from this category type
+      if (seenCategoryIds.has(p.categoryId)) {
+        return false;
+      }
+      // 3. Mark category as collected and keep the product
       seenCategoryIds.add(p.categoryId);
       return true;
     })
@@ -233,7 +239,7 @@ export default function Home({
           </svg>
         </div>
 
-        {/* Featured category */}
+        {/* Featured category header */}
         <div className="px-4 mt-2 flex items-center justify-between">
           <h3 className="font-bold text-gray-800">ប្រភេទមុខទំនិញ</h3>
           <button
