@@ -26,12 +26,24 @@ export default function Home({
   const { customerName, points, totalItems, tgUser, isFromTelegram, logout, products, productsLoading } = useCart();
   const [showShopPopup, setShowShopPopup] = useState(false);
   const [showPriceTable, setShowPriceTable] = useState(false);
-  const featuredProducts = products.slice(0, 3);
+
+  // ── FILTER: Show only 1 item per category type ──
+  const seenCategoryIds = new Set<string>();
+  const featuredProducts = products
+    .filter((p) => {
+      if (!p.categoryId || seenCategoryIds.has(p.categoryId)) {
+        return false; // Skip if this category was already collected
+      }
+      seenCategoryIds.add(p.categoryId);
+      return true;
+    })
+    .slice(0, 3);
 
   return (
     <div className="flex flex-col h-full">
       {showShopPopup && <ShopPopup onClose={() => setShowShopPopup(false)} />}
       {showPriceTable && <PriceTablePopup onClose={() => setShowPriceTable(false)} />}
+      
       {/* Hero banner */}
       <div
         className="relative hero-brush overflow-hidden"
@@ -43,64 +55,60 @@ export default function Home({
       >
         {/* top bar: logo left, socials right */}
         <div className="flex items-center gap-2 px-4 pt-4 pb-2">
-          {/* Brand logo — top left (opens shop info & distance popup) */}
-          {/* <button onClick={() => setShowShopPopup(true)} className="flex-shrink-0">
-            <BrandLogo size={100} />
-          </button> */}
           <div className="flex-1" />
           {/* Facebook Link */}
-            <a 
-              href="https://www.facebook.com/NoukThom26CoffeenDrinks" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity"
-            >
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/960px-Facebook_f_logo_%282021%29.svg.png" 
-                alt="Facebook" 
-                className="w-full h-full object-cover" 
-              />
-            </a>
+          <a 
+            href="https://www.facebook.com/NoukThom26CoffeenDrinks" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity"
+          >
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/960px-Facebook_f_logo_%282021%29.svg.png" 
+              alt="Facebook" 
+              className="w-full h-full object-cover" 
+            />
+          </a>
 
-            {/* TikTok Link */}
-            <a 
-              href="https://www.tiktok.com/@nt26genzcoffe?is_from_webapp=1&sender_device=pc" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity"
-            >
-              <img 
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEohsl44VcIOTFLazDoGPTpIgzSnvEbFIGoGwP2UhsBYTz5By1go4Fj5k&s=10" 
-                alt="TikTok" 
-                className="w-full h-full object-cover" 
-              />
-            </a>
+          {/* TikTok Link */}
+          <a 
+            href="https://www.tiktok.com/@nt26genzcoffe?is_from_webapp=1&sender_device=pc" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity"
+          >
+            <img 
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEohsl44VcIOTFLazDoGPTpIgzSnvEbFIGoGwP2UhsBYTz5By1go4Fj5k&s=10" 
+              alt="TikTok" 
+              className="w-full h-full object-cover" 
+            />
+          </a>
 
-            {/* Telegram Link */}
-            <a 
-              href="https://t.me/NT26_Cafe" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity"
-            >
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/960px-Telegram_logo.svg.png?_=20220101141644" 
-                alt="Telegram" 
-                className="w-full h-full object-cover" 
-              />
-            </a>
+          {/* Telegram Link */}
+          <a 
+            href="https://t.me/NT26_Cafe" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity"
+          >
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/960px-Telegram_logo.svg.png?_=20220101141644" 
+              alt="Telegram" 
+              className="w-full h-full object-cover" 
+            />
+          </a>
 
-            {/* Settings Button */}
-            <button
-              onClick={() => onNavigate("admin")}
-              title="Admin"
-              className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity"
-            >
-              <img 
-                src="https://img.magnific.com/free-psd/3d-settings-icon_84443-55889.jpg?semt=ais_hybrid&w=740&q=80" 
-                alt="Settings" 
-                className="w-full h-full object-cover" 
-              />
+          {/* Settings Button */}
+          <button
+            onClick={() => onNavigate("admin")}
+            title="Admin"
+            className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center hover:opacity-80 transition-opacity"
+          >
+            <img 
+              src="https://img.magnific.com/free-psd/3d-settings-icon_84443-55889.jpg?semt=ais_hybrid&w=740&q=80" 
+              alt="Settings" 
+              className="w-full h-full object-cover" 
+            />
           </button>
         </div>
         <div className="absolute left-4 top-4 z-30">
@@ -110,82 +118,45 @@ export default function Home({
             className="w-25 h-25 rounded-full object-cover shadow-2xl"
           />
         </div>
-        {/* Hero area: faded cup illustrations + big brand title */}
+        {/* Hero area */}
         <div className="relative h-56 flex items-center justify-center">
-          {/* faded cup illustration */}
-          {/* <div className="absolute left-6 top-6 opacity-40">
-            <svg width="80" height="120" viewBox="0 0 80 120" fill="none" stroke="#fff8dc" strokeWidth="2">
-              <path d="M15 30h50l-6 80H21z" />
-              <path d="M20 40h40" />
-            </svg>
-          </div> */}
-          {/* faded coffee bag */}
-          {/* <div className="absolute left-24 top-16 opacity-40">
-            <svg width="60" height="80" viewBox="0 0 60 80" fill="none" stroke="#fff8dc" strokeWidth="2">
-              <rect x="10" y="10" width="40" height="60" rx="2" />
-              <text x="30" y="45" textAnchor="middle" fill="#fff8dc" fontSize="8">coffee</text>
-            </svg>
-          </div> */}
-          {/* khmer text */}
           <div className="absolute inset-0 flex items-start justify-end pt-8 pointer-events-none">
-            <div className="flex flex-col items-center text-center">
-            {/* <div
-              className="text-[#3D2314] text-5xl font-black leading-none tracking-wide"
-              style={{ fontFamily: "Kantumruy Pro", textShadow: "0 2px 8px rgba(0,0,0,0.65)" }}
-            >
-              នុធំ26
-            </div>
-            <div
-              className="text-[#3D2314] text-3xl mt-1 font-semibold"
-              style={{ fontFamily: "Kantumruy Pro", textShadow: "0 2px 8px rgba(0,0,0,0.65)" }}
-            >
-              កាហ្វេ
-            </div> */}
-            </div>
+            <div className="flex flex-col items-center text-center"></div>
           </div>
-          {/* faded coffee cup icon */}
-          {/* <div className="absolute right-6 top-4 opacity-40">
-            <svg width="50" height="50" viewBox="0 0 50 50" fill="none" stroke="#fff8dc" strokeWidth="2">
-              <path d="M10 25c0-8 6-15 15-15s15 7 15 15" />
-              <path d="M8 30h34l-4 12H12z" />
-              <path d="M42 32c4 0 5 6 0 6" />
-            </svg>
-          </div> */}
         </div>
 
         {/* bottom contact bar */}
         <div className="absolute bottom-0 left-0 right-0 grid grid-cols-2 items-center pb-3 text-white text-xs w-full px-2">
-  {/* Left side: Phone number with solid background pill */}
-  <div className="flex justify-end pr-1.5 max-w-full">
-  <div className="flex items-center gap-1.5 sm:gap-2 opacity-95 contact-float shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] rounded-full pl-1 pr-3 py-1 bg-gray-500/50 border-2 border-[#148577] min-w-0 max-w-full">
-    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white flex items-center justify-center overflow-hidden flex-shrink-0">
-      <img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB6INYnvxmk0WWLLzUhvu2pRekYTLq2gjBIDAoJsqlhFOa8GeIetYJKno&s=10"
-        alt="Telegram Contact"
-        className="w-6 h-6 object-cover contact-pulse"
-      />
-    </div>
-    {/* Changed text-[#148577] back to text-white */}
-    <span className="font-black text-white text-[16px] sm:text-sm whitespace-nowrap">
-        +855 93 342 226    
-    </span>
-  </div>
-</div>
+          {/* Left side: Phone number with solid background pill */}
+          <div className="flex justify-end pr-1.5 max-w-full">
+            <div className="flex items-center gap-1.5 sm:gap-2 opacity-95 contact-float shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] rounded-full pl-1 pr-3 py-1 bg-gray-500/50 border-2 border-[#148577] min-w-0 max-w-full">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white flex items-center justify-center overflow-hidden flex-shrink-0">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB6INYnvxmk0WWLLzUhvu2pRekYTLq2gjBIDAoJsqlhFOa8GeIetYJKno&s=10"
+                  alt="Telegram Contact"
+                  className="w-6 h-6 object-cover contact-pulse"
+                />
+              </div>
+              <span className="font-black text-white text-[16px] sm:text-sm whitespace-nowrap">
+                +855 93 342 226    
+              </span>
+            </div>
+          </div>
 
-  {/* Right side: Brand button */}
-  <div className="flex justify-start pl-1.5 max-w-full">
-    <button
-      onClick={() => setShowPriceTable(true)}
-      className="price-btn float-anim bg-white rounded-full pl-1 pr-2 py-1 flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-sm font-semibold text-gray-800 shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border-2 border-[#148c78] transform active:translate-y-1 active:shadow-[0_2px_6px_rgba(0,0,0,0.18),0_4px_12px_rgba(0,0,0,0.12)] min-w-0 max-w-full"
-    >
-      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
-        <img src={brandImage1} alt="Brand" className="w-full h-full object-cover" />
-      </div>
-      <span className="truncate text-gray-800">នុធំ26 បោកគក់ សម្ងួតរហ័ស</span>
-      <IconChevronDown className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 chev-rotate" />
-    </button>
-  </div>
-</div>
+          {/* Right side: Brand button */}
+          <div className="flex justify-start pl-1.5 max-w-full">
+            <button
+              onClick={() => setShowPriceTable(true)}
+              className="price-btn float-anim bg-white rounded-full pl-1 pr-2 py-1 flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-sm font-semibold text-gray-800 shadow-[0_4px_10px_rgba(0,0,0,0.22),0_8px_24px_rgba(0,0,0,0.16)] border-2 border-[#148c78] transform active:translate-y-1 active:shadow-[0_2px_6px_rgba(0,0,0,0.18),0_4px_12px_rgba(0,0,0,0.12)] min-w-0 max-w-full"
+            >
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
+                <img src={brandImage1} alt="Brand" className="w-full h-full object-cover" />
+              </div>
+              <span className="truncate text-gray-800">នុធំ26 បោកគក់ សម្ងួតរហ័ស</span>
+              <IconChevronDown className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 chev-rotate" />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Scrollable content */}
